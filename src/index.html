@@ -24,12 +24,18 @@
     <p>
       TypeScript app with simple file reader.
     </p>
-    <input
-      type="file"
-      name="upload"
-      id="upload"
-      accept="text/plain"
-    />
+    <div class="control">
+      <input
+        type="file"
+        name="upload"
+        id="upload"
+        accept="text/plain"
+      />
+      <button
+        id="download"
+        class="hide"
+      >下載檔案</button>
+    </div>
     <textarea
       cols="68"
       rows="10"
