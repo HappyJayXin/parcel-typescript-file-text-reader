@@ -117,13 +117,15 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"index.ts":[function(require,module,exports) {
+})({"readFile.ts":[function(require,module,exports) {
 "use strict";
 
-var upload = document.getElementById('upload');
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 var content = document.getElementById('content');
 
-var readFile = function readFile(event) {
+function default_1(event) {
   var file = event.target.files[0];
   var fReader = new FileReader();
   content.value = 'Hello';
@@ -133,10 +135,27 @@ var readFile = function readFile(event) {
   };
 
   fReader.readAsText(file);
+}
+
+exports.default = default_1;
+},{}],"index.ts":[function(require,module,exports) {
+"use strict";
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
 };
 
-upload && (upload.onchange = readFile);
-},{}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var readFile_1 = __importDefault(require("./readFile"));
+
+var upload = document.getElementById('upload');
+upload && (upload.onchange = readFile_1.default);
+},{"./readFile":"readFile.ts"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
