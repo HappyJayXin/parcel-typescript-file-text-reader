@@ -117,27 +117,96 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"readFile.ts":[function(require,module,exports) {
+})({"content.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var content = document.getElementById('content');
 
-function default_1(event) {
+var getContent = function getContent() {
+  var content = document.getElementById('content');
+  return content.value;
+};
+
+exports.getContent = getContent;
+
+var setContent = function setContent(text) {
+  var content = document.getElementById('content');
+  content.value = text;
+};
+
+exports.setContent = setContent;
+},{}],"showAndHide.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var showEl = function showEl(element) {
+  element.classList.remove('hide');
+};
+
+exports.showEl = showEl;
+
+var hideEl = function hideEl(element) {
+  element.classList.add('hide');
+};
+
+exports.hideEl = hideEl;
+},{}],"readFile.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var content_1 = require("./content");
+
+var showAndHide_1 = require("./showAndHide");
+
+var download = document.getElementById('download');
+var upload = document.getElementById('upload');
+
+var readFile = function readFile(event) {
   var file = event.target.files[0];
   var fReader = new FileReader();
-  content.value = 'Hello';
 
   fReader.onload = function (event) {
-    content.value = event.target.result;
+    content_1.setContent(event.target.result);
   };
 
   fReader.readAsText(file);
-}
+  showAndHide_1.showEl(download);
+  showAndHide_1.hideEl(upload);
+};
 
-exports.default = default_1;
+exports.default = readFile;
+},{"./content":"content.ts","./showAndHide":"showAndHide.ts"}],"downloadFile.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var downloadFile = function downloadFile(filename, content) {
+  var blob = new Blob([content], {
+    type: 'text/plain'
+  });
+  var url = window.URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function () {
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  }, 5);
+};
+
+exports.default = downloadFile;
 },{}],"index.ts":[function(require,module,exports) {
 "use strict";
 
@@ -153,9 +222,18 @@ Object.defineProperty(exports, "__esModule", {
 
 var readFile_1 = __importDefault(require("./readFile"));
 
+var downloadFile_1 = __importDefault(require("./downloadFile"));
+
+var content_1 = require("./content");
+
 var upload = document.getElementById('upload');
+var download = document.getElementById('download');
 upload && (upload.onchange = readFile_1.default);
-},{"./readFile":"readFile.ts"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+download && download.addEventListener('click', function () {
+  var content = content_1.getContent();
+  content && downloadFile_1.default('text-reader', content);
+});
+},{"./readFile":"readFile.ts","./downloadFile":"downloadFile.ts","./content":"content.ts"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -183,7 +261,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "1848" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "12439" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
