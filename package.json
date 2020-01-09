@@ -8,13 +8,16 @@
     "build": "cross-env NODE_ENV=production parcel build src/index.html --public-url .",
     "watch": "parcel watch src/index.html --port 3000",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "eslint": "eslint src --ext .ts --fix"
   },
   "devDependencies": {
+    "@typescript-eslint/parser": "^2.15.0",
     "cross-env": "^5.2.0",
+    "eslint": "^6.8.0",
     "gh-pages": "^1.2.0",
     "parcel-bundler": "^1.9.7",
-    "typescript": "^2.9.2"
+    "typescript": "^3.7.4"
   },
   "repository": {
     "type": "git",
@@ -27,5 +30,20 @@
   ],
   "keywords": [],
   "author": "Jay",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "husky": "^4.0.3",
+    "lint-staged": "^9.5.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/*.{ts}": [
+      "eslint src --ext .ts --fix",
+      "git add"
+    ]
+  }
 }
